@@ -1,0 +1,40 @@
+<div class="login-container">
+  <div class="login-card">
+    <div class="login-header">
+    <h1>Create Your Account</h1>
+  </div>
+
+  <div class="account-card-body">
+    <%= form_with model: @user, url: createaccount_path, local: true do |f| %>
+      <div class="form-group">
+        <%= f.label :first_name, "First Name" %>
+        <%= f.text_field :first_name, class: "form-control", placeholder: "Enter your first name" %>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :last_name, "Last Name" %>
+        <%= f.text_field :last_name, class: "form-control", placeholder: "Enter your last name" %>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :email, "Email" %>
+        <%= f.email_field :email, class: "form-control", placeholder: "Enter your email" %>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :password, "Password" %>
+        <%= f.password_field :password, class: "form-control", placeholder: "Enter your password" %>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :canvas_token, "Canvas Access Token" %>
+        <%= f.password_field :canvas_token, class: "form-control", placeholder: "Paste your Canvas token here" %>
+        <small class="form-text text-muted">
+          You can generate a token from your Canvas profile under Approved Integrations.
+        </small>
+      </div>
+
+      <%= f.submit "Create Account", class: "btn btn-primary mt-3" %>
+    <% end %>
+  </div>
+</div>

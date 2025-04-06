@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Course Companion</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Disable Turbo prefetching globally -->
+    <meta name="turbo-prefetch" content="false">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+    <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
+    <%= javascript_importmap_tags %>
+  </head>
+  <body>
+    <% if session[:user_id] %>
+      <header class="app-header">
+        <div class="container">
+          <div class="header-content d-flex justify-content-between align-items-center py-3">
+            <div class="logo">
+              <h1 class="m-0">Course Companion</h1>
+            </div>
+            <div class="header-actions">
+              <%= button_to "Logout", logout_path, method: :delete, class: "btn btn-outline-danger" %>
+            </div>
+          </div>
+        </div>
+      </header>
+    <% end %>
+
+    <main class="container mt-4">
+      <% if flash[:notice].present? %>
+        <div class="alert alert-success">
+          <%= flash[:notice] %>
+        </div>
+      <% end %>
+      <% if flash[:alert].present? %>
+        <div class="alert alert-danger">
+          <%= flash[:alert] %>
+        </div>
+      <% end %>
+
+      <!-- Course Name and Intro -->
+      <div class="courses-container">
+        <div class="section-header">
+          <h1><%= @course["name"] %></h1>
+          <p class="text-muted">Browse topics found in Canvas files</p>
+        </div>
+
+        <!-- Cards for Each File in the Course -->
+        <div class="course-cards">
+          <% if @files.present? %>
+            <% @files.each do |file| %>
+              <div class="available-course-card">
+                <div class="course-card-header">
+                  <div class="course-info">
+                    <h3><%= file["display_name"] || file["title"] || "Filler File" %></h3>
+                  </div>
+                </div>
+                <div class="course-card-footer">
+                  <%= link_to "Study file", study_file_path(file_url: file["url"], file_name: file["filename"]),data: { turbo_frame: "file_summary" },class: "btn btn-primary study-file-btn" %>
+                </div>
+              </div>
+            <% end %>
+          <% else %>
+            <!-- Single card if no files are available -->
+            <div class="available-course-card">
+              <div class="course-card-header">
+                <div class="course-info">
+                  <h3>No Files Found</h3>
+                </div>
+              </div>
+              <div class="course-card-footer">
+                <span class="text-muted">This course has no files in Canvas.</span>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      </div>
+
+      <!-- File Summary Section -->
+        <div class="courses-container" style="margin-top: 30px;">
+          <div class="section-header">
+            <h2>File Summary</h2>
+            <p class="text-muted">Content from the selected file will appear here</p>
+          </div>
+
+          <!-- Place alert container OUTSIDE turbo-frame -->
+          <div id="dynamic-alerts"></div>
+
+          <turbo-frame id="file_summary">
+            <div class="file-summary-placeholder">
+              <p class="text-muted">Select a file to see its summary here.</p>
+            </div>
+          </turbo-frame>
+        </div>
+
+
+      <%= yield %>
+    </main>
+
+    <footer class="app-footer mt-5 py-3 bg-light">
+      <div class="container text-center">
+        <p>Created by Joshua Hunsader</p>
+      </div>
+    </footer>
+  </body>
+</html>

@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Course Companion</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+    <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
+    <%= javascript_importmap_tags %>
+  </head>
+  <body>
+    <% if session[:user_id] %>
+      <header class="app-header">
+        <div class="container">
+          <div class="header-content d-flex justify-content-between align-items-center py-3">
+            <div class="logo">
+              <h1 class="m-0">Course Companion</h1>
+            </div>
+            <div class="header-actions">
+              <%= button_to "Logout", logout_path, method: :delete, class: "btn btn-outline-danger" %>
+            </div>
+          </div>
+        </div>
+      </header>
+    <% end %>
+
+    <main class="container mt-4">
+      <% if flash[:notice].present? %>
+        <div class="alert alert-success">
+          <%= flash[:notice] %>
+        </div>
+      <% end %>
+      <% if flash[:alert].present? %>
+        <div class="alert alert-danger">
+          <%= flash[:alert] %>
+        </div>
+      <% end %>
+
+      <!-- Available Courses Section -->
+      <div class="courses-container">
+        <div class="section-header">
+          <h1>Available Courses</h1>
+          <p class="text-muted">Browse courses for the current semester</p>
+        </div>
+
+        <div class="course-cards">
+          <% if @courses.present? %>
+            <% @courses.each do |course| %>
+              <div class="available-course-card">
+                <div class="course-card-header">
+                  <div class="course-info">
+                    <h3><%= course["name"] || "Filler Course" %></h3>
+                    <span class="course-number"><%= course["course_code"] || "N/A" %></span>
+                  </div>
+                </div>
+                <div class="course-card-footer">
+                  <%= link_to "Study", dashboard_course_path(course["name"].parameterize), class: "btn btn-primary", data: { turbo: false } %>
+                </div>
+              </div>
+            <% end %>
+          <% else %>
+            <!-- Single card if no files are available -->
+            <div class="available-course-card">
+              <div class="course-card-header">
+                <div class="course-info">
+                  <h3>No Courses Found</h3>
+                </div>
+              </div>
+              <div class="course-card-footer">
+                <span class="text-muted">Canvas API returned no courses.</span>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      </div>
+      
+      <%= yield %>
+    </main>
+
+    <footer class="app-footer mt-5 py-3 bg-light">
+      <div class="container text-center">
+        <p>Created by Joshua Hunsader</p>
+      </div>
+    </footer>
+  </body>
+</html>

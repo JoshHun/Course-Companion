@@ -1,24 +1,11 @@
 # README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+1. replace GEMINI_API_KEY in .env with your personal key
 
-Things you may want to cover:
+2. in terminal:
+  in/rails db:migrate
+  rails server
 
-* Ruby version
+3. Then create an account and link your canvas_access_token
 
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+4. Login
